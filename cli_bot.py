@@ -1,7 +1,5 @@
-from collections import UserDict
-from datetime import datetime
-from datetime import date
-from classes import AddressBook, Record, DateFormatException, Phone
+
+from classes import AddressBook, Record, DateFormatException, 
  
 def input_error(func):   
     def inner(*args, **kwargs):   
@@ -46,6 +44,12 @@ def show_all(book):
         all_contacts.append(str(record))
     return "\n".join(all_contacts)
 
+@input_error
+def birthdays(book):
+    result = book.get_birthdays_per_week()
+    return result if result else ""
+    
+@input_error
 def show_birthday(args, book):
     name = args[0]
     record = book.find(name)
@@ -105,10 +109,12 @@ def main():
             print(change_contact(args, book))
         elif command == "all":
             print(show_all(book))
-        elif command == "addbrt":
+        elif command == "add-birthday":
             print(add_birthday(args, book))
-        elif command == "brt":
+        elif command == "show-birthday":
             print(show_birthday(args, book))
+        elif command == "birthdays":
+            print(birthdays(book))
         else:
             print("Invalid command.")
 

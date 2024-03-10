@@ -1,10 +1,9 @@
+from collections import defaultdict, UserDict
+from datetime import datetime, date, timedelta
 
-from collections import UserDict
-from datetime import datetime
-from datetime import date
 
 class DateFormatException(Exception):
-    def __init__(self, message="This is date format exception."):
+    def __init__(self, message):
         self.message = message
         super().__init__(self.message)
 
@@ -104,11 +103,40 @@ class AddressBook(UserDict):
             return "Successfully deleted"
         else:
             return "Unable to delete"
-    def get_birthdays_per_week(self)
+        
+    def get_birthdays_per_week(self):
+        required_data = defaultdict(list)
+        today = datetime.today().date()
+        for user in self.data.values():
+            name = user.name.value
+            birthday = user.birthday.value
+            birthday_this_year = birthday.replace(year=today.year)
+
+            if birthday_this_year < today:
+                birthday_this_year = birthday_this_year.replace(year=birthday_this_year.year + 1)
+            delta_days = (birthday_this_year - today).days
+
+            if delta_days < 7:
+                weekday = birthday_this_year.strftime("%A")
+                if weekday in ['Saturday', 'Sunday']:
+                    weekday = (birthday_this_year + timedelta(days=(7 - today.weekday()))).strftime("%A")
+                required_data[weekday].append(name)
+
+        if not required_data:
+            print("No birthdays in the next 7 days.")
+            return
+
+        for day, names in required_data.items():
+            if day in ['Saturday', 'Sunday']:
+                day = 'Monday'  
+            print(f"{day}: {', '.join(names)}")
+    
 
 # book = AddressBook()
 # john_record = Record("John")
 # john_record.add_phone("1234567890")
-# john_record.add_phone("55555555551")
-# john_record.add_birthday("11.05.2024")
+# john_record.add_phone("5555555555")
+# john_record.add_birthday("15.03.2023")
+# book.add_record(john_record)
+# book.get_birthdays_per_week()
 # print(john_record)
