@@ -3,6 +3,12 @@ from collections import UserDict
 from datetime import datetime
 from datetime import date
 
+class DateFormatException(Exception):
+    def __init__(self, message="This is date format exception."):
+        self.message = message
+        super().__init__(self.message)
+
+
 class Field: 
     def __init__(self, value):
         self.value = value
@@ -19,10 +25,10 @@ class Birthday(Field):
         try:
             birthday = datetime.strptime(value, '%d.%m.%Y').date()
             if birthday > date.today():
-                raise ValueError
+                raise DateFormatException
             super().__init__(birthday)
         except ValueError:
-            raise ValueError("Incorrect format or future date. Use format Day/Month/Year (Ex. 01/01/2000).")
+            raise DateFormatException
 
 class Phone(Field):
     def __init__(self, phone):
@@ -30,7 +36,7 @@ class Phone(Field):
         if len(phone) == 10:
             self.phone = phone
         else:
-            self.phone = None
+            raise ValueError
 
 class Record:
     def __init__(self, name):  
@@ -38,7 +44,7 @@ class Record:
         self.phones = []
         self.birthday = None
 
-    def add_phone(self, phone):      
+    def add_phone(self, phone):
         phone = Phone(phone)
         self.phones.append(phone)
 
@@ -60,6 +66,8 @@ class Record:
             self.birthday = Birthday(birthday)
         except ValueError as e:
             print(e)
+            raise DateFormatException
+            
 
 
     def find_phone(self, phone_numb):        
@@ -96,6 +104,7 @@ class AddressBook(UserDict):
             return "Successfully deleted"
         else:
             return "Unable to delete"
+    def get_birthdays_per_week(self)
 
 # book = AddressBook()
 # john_record = Record("John")
