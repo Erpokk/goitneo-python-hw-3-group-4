@@ -132,11 +132,4 @@ class AddressBook(UserDict):
             print(f"{day}: {', '.join(names)}")
     
 
-# book = AddressBook()
-# john_record = Record("John")
-# john_record.add_phone("1234567890")
-# john_record.add_phone("5555555555")
-# john_record.add_birthday("15.03.2023")
-# book.add_record(john_record)
-# book.get_birthdays_per_week()
-# print(john_record)
+

@@ -1,5 +1,5 @@
 
-from classes import AddressBook, Record, DateFormatException, 
+from classes import AddressBook, Record, DateFormatException
  
 def input_error(func):   
     def inner(*args, **kwargs):   
